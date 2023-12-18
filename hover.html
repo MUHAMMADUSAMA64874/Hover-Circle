@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interconnected Circles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        .circle-container {
+            display: flex;
+            align-items: center;
+            gap: -50px; /* Remove the gap between circles */
+        }
+
+        .circle-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .circle {
+            width: 40vh;
+            height: 40vh;
+            border-radius: 50%;
+            background-color: #EFEFEF;
+            color: rgb(110, 110, 110);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, background-color 0.3s, color 0.3s; 
+            margin-left: -60px;
+            
+        }
+
+        .circle:hover {
+            transform: scale(1.1) translate(0, -10px); /* Add vertical animation on hover */
+            background-color: #EFEFEF; /* Change background color on hover */
+            color: rgb(110, 110, 110); /* Change text color on hover */
+        }
+
+        .circle.active {
+            background-color: #99E9E0;
+            color: black;
+            text-decoration: underline;
+            z-index: 999;
+        }
+
+        .circle-text {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .circle.active + .circle-text {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="circle-container">
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle1">Text 1</div>
+            <div class="circle-text" id="circle1">This is Text 1 content.</div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle2">Text 2</div>
+            <div class="circle-text" id="circle2">This is Text 2 content.</div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle3">Text 3</div>
+            <div class="circle-text" id="circle3">This is Text 3 content.</div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle4">Text 4</div>
+            <div class="circle-text" id="circle4">This is Text 4 content.</div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle5">Text 5</div>
+            <div class="circle-text" id="circle5">This is Text 5 content.</div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="circle" data-target="circle6">Text 6</div>
+            <div class="circle-text" id="circle6">This is Text 6 content.</div>
+        </div>
+    </div>
+
+    <script>
+        const circles = document.querySelectorAll('.circle');
+        const circleTexts = document.querySelectorAll('.circle-text');
+
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                const targetId = circle.getAttribute('data-target');
+                circleTexts.forEach(text => {
+                    text.style.display = 'none';
+                });
+                document.getElementById(targetId).style.display = 'block';
+
+                circles.forEach(c => {
+                    c.classList.remove('active');
+                });
+                circle.classList.add('active');
+            });
+        });
+
+
+
+        const circleContainer = document.querySelector('.circle-container');
+        const circless = document.querySelectorAll('.circle');
+
+        circleContainer.addEventListener('mousemove', (e) => {
+            circles.forEach(circle => {
+                const circleRect = circle.getBoundingClientRect();
+                const containerRect = circleContainer.getBoundingClientRect();
+
+                const mouseX = e.clientX - containerRect.left;
+                const mouseY = e.clientY - containerRect.top;
+
+                const dx = mouseX - (circleRect.left + circleRect.width / 2);
+                const dy = mouseY - (circleRect.top + circleRect.height / 2);
+
+                circle.style.transform = `translate(${dx / 10}px, ${dy / 10}px)`;
+            });
+        });
+
+        circleContainer.addEventListener('mouseleave', () => {
+            circles.forEach(circle => {
+                circle.style.transform = 'translate(0)';
+            });
+        });
+    </script>
+</body>
+</html>
